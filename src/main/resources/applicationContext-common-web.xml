@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" 
+	xsi:schemaLocation="
+     http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
+     http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+     http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
+     http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
+     http://www.springframework.org/schema/mvc  
+     http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">
+
+<!--
+  This bean sets up the Velocity environment for us based on a root path for templates.
+  Optionally, a properties file can be specified for more control over the Velocity
+  environment, but the defaults are pretty sane for file based template loading.
+-->
+<bean id="velocityConfig" class="org.springframework.web.servlet.view.velocity.VelocityConfigurer">
+		<property name="resourceLoaderPath" value="WEB-INF/views" />
+		 <property name="configLocation" value="classpath:velocity/velocity.properties"></property>
+</bean>
+
+
+
+<!-- 默认 HandlerMapping -->
+<bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping">
+	<property name="order" value="-1" />
+	<property name="interceptors">
+   		<list>
+			<ref bean="urlConfigLauncherInterceptor" />
+			<ref bean="threadCacheCleanInterceptor" />
+		</list>
+   	</property>
+</bean>	
+<bean class="org.springframework.web.servlet.mvc.HttpRequestHandlerAdapter">
+</bean>
+
+
+<mvc:annotation-driven validator="validator"  />
+<bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean" />
+
+<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+<property name="order" value="1" /> 
+    <property name="messageConverters">  
+        <list>  
+            <bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">  
+                <property name="supportedMediaTypes">  
+                    <list>  
+                        <value>text/html;charset=UTF-8</value>  
+                    </list>  
+                </property>  
+            </bean>  
+        </list>  
+    </property>
+    <property name="webBindingInitializer">
+        <bean id="configurableWebBindingInitializer" class="org.springframework.web.bind.support.ConfigurableWebBindingInitializer">
+            <property name="validator">
+                <ref bean="validator"/>
+            </property>
+            <property name="conversionService">  
+                <bean class="org.springframework.format.support.FormattingConversionServiceFactoryBean"></bean>  
+            </property>
+        </bean>
+    </property>
+</bean>
+<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter"> 
+</bean>  
+
+<bean
+	class="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping">
+	<property name="order" value="1" />
+	<property name="interceptors">
+   		<list>
+			<ref bean="urlConfigLauncherInterceptor" />
+			<ref bean="threadCacheCleanInterceptor" />
+		</list>
+   	</property>
+</bean>
+
+	
+	<bean name="/commonAction.htm" class="com.usefullc.platform.web.CommonRequestAction"  >
+	</bean>	
+	
+<!--
+  View resolvers can also be configured with ResourceBundles or XML files. If you need
+  different view resolving based on Locale, you have to use the resource bundle resolver.
+-->
+<bean id="viewResolver" class="org.springframework.web.servlet.view.velocity.VelocityLayoutViewResolver">
+  <property name="cache" value="false"/>
+  <property name="prefix" value="screen/"/>
+  <property name="suffix" value=".vm"/>
+  <property name="layoutUrl" value="layout/layout.vm"/>
+  <property name="contentType" value="text/html;charset=utf-8"/>
+  <property name="dateToolAttribute" value="dateTool"/>
+  <property name="numberToolAttribute" value="numberTool"/>
+<!--   <property name=toolboxConfigLocation value="classpath:velocity/velocity-toolbox.xml"/> -->
+</bean>
+
+
+
+</beans>

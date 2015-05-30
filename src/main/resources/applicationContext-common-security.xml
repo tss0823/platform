@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+	xmlns:beans="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans  
+            http://www.springframework.org/schema/beans/spring-beans-3.1.xsd  
+            http://www.springframework.org/schema/security  
+            http://www.springframework.org/schema/security/spring-security-3.1.xsd">
+
+	<http pattern="/images/**" security="none"/>              
+	<http pattern="/styles/**" security="none"/>              
+	<http pattern="/scripts/**" security="none"/> 
+
+	
+	<http auto-config="true" access-denied-page="/403.htm">
+		
+		<intercept-url pattern="/**" access="IS_AUTHENTICATED_FULLY" />
+		
+		<form-login login-page="/enterLogin.htm"
+			authentication-failure-url="/enterLogin.htm?error=true"
+			default-target-url="/index.htm" username-parameter="username"
+			password-parameter="password" login-processing-url="/login_process.htm" />
+			
+		<logout logout-url="/logout.htm" logout-success-url="/enterLogin.htm" />
+
+		<remember-me />  
+		
+		<http-basic />
+		
+		<custom-filter before="FILTER_SECURITY_INTERCEPTOR" ref="filterSecurityInterceptor" />
+		
+    </http>
+
+	<beans:bean id="filterSecurityInterceptor"
+		class="org.springframework.security.web.access.intercept.FilterSecurityInterceptor">
+		<beans:property name="authenticationManager" ref="authenticationManager" />
+		<beans:property name="accessDecisionManager" ref="accessDecisionManager" />
+		<beans:property name="securityMetadataSource" ref="securityMetadataSource" />
+	</beans:bean>
+
+	<!-- 认证管理器，实现用户认证的入口，主要实现UserDetailsService接口即可 -->
+	<authentication-manager alias="authenticationManager">
+		<authentication-provider user-service-ref="userDetailService">
+			<password-encoder hash="md5" />
+		</authentication-provider>
+	</authentication-manager>
+
+	<beans:bean id="userDetailService"
+		class="com.usefullc.platform.service.auth.SecurityManagerSupport" />
+
+	<!-- 访问决策器 -->
+	<beans:bean id="accessDecisionManager"
+		class="com.usefullc.platform.service.auth.AccessDecisionManager">
+	</beans:bean>
+
+	<!-- 资源源数据定义 -->
+	<beans:bean id="securityMetadataSource"
+		class="com.usefullc.platform.service.auth.SecureResourceFilterInvocationDefinitionSource">
+	</beans:bean>
+
+</beans:beans> 

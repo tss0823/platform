@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:task="http://www.springframework.org/schema/task"  
+	xsi:schemaLocation="
+     http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
+     http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+     http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
+     http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
+     http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.2.xsd"
+     >
+
+	<!--  method interceptor aop  -->
+	<bean id="methodProfileInterceptor" class="com.usefullc.platform.common.profiler.MethodProfileInterceptor">
+		<property name="monitor" value="${profiler.monitor}" />
+		<property name="infoValve" value="${profiler.infoValve}" />
+		<property name="warnValve" value="${profiler.warnValve}" />
+		<property name="errorValve" value="${profiler.errorValve}" />
+		<property name="fatalValve" value="${profiler.fatalValve}" />
+	</bean>
+	
+	<aop:config>
+		<aop:pointcut id="daoOperation" expression="execution(* com.qunyiinfo..*DaoImpl.*(..))" />
+		<aop:pointcut id="serviceOperation" expression="execution(* com.qunyiinfo..*ServiceImpl.*(..))" />
+		<aop:pointcut id="controllerOperation" expression="execution(* com.qunyiinfo..*Controller.*(..))" />
+		<aop:advisor advice-ref="methodProfileInterceptor" pointcut-ref="serviceOperation" />
+		<aop:advisor advice-ref="methodProfileInterceptor" pointcut-ref="daoOperation" />
+		<aop:advisor advice-ref="methodProfileInterceptor" pointcut-ref="controllerOperation" />
+	</aop:config>
+	
+	
+		
+	<!-- profiler -->
+	<bean id="performanceMonitorInterceptor" class="com.usefullc.platform.common.profiler.PerformanceMonitorInterceptor">
+	    <property name="monitor" value="${profiler.monitor}" />
+	 	<property name="urlPattern" value="${profiler.urlPattern}" />
+	 	<property name="threshold" value="${profiler.threshold}" />
+	</bean>
+	
+	<!-- log -->
+	<bean id="logHandlerInterceptor" class="com.usefullc.platform.common.log.LogHandlerInterceptor">
+	    <property name="monitor" value="${log.monitor}" />
+	 	<property name="urlPattern" value="${log.urlPattern}" />
+	</bean>
+	
+	
+</beans>
