@@ -51,9 +51,15 @@ public class WebCommonFilter implements Filter {
         ServletContext servletContext = filterConfig.getServletContext();
         ServeltContextManager.setServletContext(servletContext);
         WebApplicationContext wc = WebApplicationContextUtils.getWebApplicationContext(servletContext);
-        actionHandlerInvoke = wc.getBean("actionHandlerInvoke", ActionHandlerInvoke.class);
-        interceptorList = actionHandlerInvoke.getInterceptorList();
-        canExcute = CollectionUtils.isNotEmpty(interceptorList);
+        try {
+            actionHandlerInvoke = wc.getBean("actionHandlerInvoke", ActionHandlerInvoke.class);
+        } catch (Exception e) {
+            actionHandlerInvoke = null;
+        }
+        if (actionHandlerInvoke != null) {
+            interceptorList = actionHandlerInvoke.getInterceptorList();
+            canExcute = CollectionUtils.isNotEmpty(interceptorList);
+        }
 
     }
 
