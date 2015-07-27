@@ -19,4 +19,8 @@
 <!-- 	   <property name="configLocation" value="classpath:cache/ehcache.xml"/> -->
 <!-- 	</bean> -->
 
+    <bean id="vmCacheService" class="com.usefullc.platform.common.cache.vm.VmCacheServiceImpl" >
+        <property name="system" value="${mcc.system}"/>
+    </bean>
+
 </beans>
