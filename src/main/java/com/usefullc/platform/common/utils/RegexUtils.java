@@ -31,6 +31,22 @@ public class RegexUtils {
 		}
 		return str;
 	}
+
+	/**
+	 * 替换
+	 * @param str
+	 * @param paramMap
+	 * @return
+	 */
+	public static String replaceAll2(String str,Map<String,String> paramMap){
+		Set<Entry<String, String>> set = paramMap.entrySet();
+		for(Entry<String, String> entry : set){
+			String key = entry.getKey();
+			String value = entry.getValue();
+			str = str.replaceAll("\\$\\{"+key+"\\}", value);
+		}
+		return str;
+	}
 	
 	public static void main(String[] args) {
 		String str = "${aa}afdsaf${bb}";

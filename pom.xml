@@ -208,6 +208,45 @@
 			</plugin>
 	</plugins>
 	</build>
+
+    <repositories>
+        <repository>
+            <id>nexus</id>
+            <name>Nexus</name>
+            <url>http://maven.yuntaohongbao.com:8081/nexus/content/groups/public/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>thirdparty</id>
+            <name>thirdparty</name>
+            <url>http://maven.yuntaohongbao.com:8081/nexus/content/repositories/thirdparty/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>nexus</id>
+            <name>Nexus</name>
+            <url>http://maven.yuntaohongbao.com:8081/nexus/content/groups/public/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
+<!--
 	<distributionManagement>
 		<repository>
 			<id>nexus-releases</id>
@@ -215,8 +254,9 @@
 			<url>http://192.168.1.106:8086/nexus/content/repositories/releases/
 			</url>
 		</repository>
-		<!-- <snapshotRepository> <id>nexus-snapshots</id> <name>Nexus Snapshot 
+	 <snapshotRepository> <id>nexus-snapshots</id> <name>Nexus Snapshot 
 			Repository</name> <url>http://192.168.1.106:8086/nexus/content/repositories/snapshots/</url> 
-			</snapshotRepository> -->
+			</snapshotRepository> 
 	</distributionManagement>
+-->
 </project>
