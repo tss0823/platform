@@ -49,8 +49,9 @@
             <bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">  
                 <property name="supportedMediaTypes">  
                     <list>  
-                        <value>text/html;charset=UTF-8</value>  
-                    </list>  
+                        <value>text/html;charset=UTF-8</value>
+                        <value>application/json;charset=UTF-8</value>
+                    </list>
                 </property>  
             </bean>  
         </list>  
